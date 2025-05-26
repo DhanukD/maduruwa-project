@@ -290,18 +290,6 @@
             <button class="nav-btn" onclick="showPage('search')">🔍 Search & Update</button>
         </div>
 
-        <!-- Google Sheets Setup Instructions -->
-        <div class="google-sheets-setup">
-            <h3>📋 Google Sheets Setup Instructions</h3>
-            <ol>
-                <li>Create a new Google Sheet with the name "Student Health Data"</li>
-                <li>Add column headers in row 1: Name, Age, Blood Group, FBS Level (Glucometer), FBS Level (Glucose Oxidase), Weight, Height, Waist Circumference, Hip Circumference, Mid Upper Arm Circumference, Mid Upper Arm Length, Mid Upper Arm Skin Fold Thickness, Body Fat, Visceral Fat, Resting Metabolism, BMI, Body Age, Subcutaneous Fat Whole Body, Subcutaneous Fat Trunk, Subcutaneous Fat Arm, Subcutaneous Fat Leg, Skeletal Muscle Whole Body, Skeletal Muscle Trunk, Skeletal Muscle Arm, Skeletal Muscle Leg</li>
-                <li>Go to Extensions → Apps Script</li>
-                <li>Replace the default code with the provided Google Apps Script code</li>
-                <li>Deploy as web app and copy the URL to replace in the JavaScript section below</li>
-            </ol>
-        </div>
-
         <!-- Add New Student Page -->
         <div id="addPage" class="page active">
             <h2>Add New Student Data</h2>
@@ -556,7 +544,7 @@
 
     <script>
         // Replace this URL with your Google Apps Script deployment URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqOeZZlQyBY6nJAPU2ncRvlhaVC3a01pvbC6Qzwvnz-clLSbOPGUO0ahrgCemYT0fi/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-w_IM-tXZ1RGuf0rFxX6susEWT2_R4LLTjM0ZAabCY2juuVOjGSkspzbQxOFxqUA8/exec';
         
         let currentStudentRow = null;
 
