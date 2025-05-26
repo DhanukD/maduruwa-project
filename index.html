@@ -41,45 +41,45 @@
             opacity: 0.9;
         }
 
-        .nav-buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
+        .setup-info {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
             margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .nav-btn {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .nav-btn:hover, .nav-btn.active {
-            background: rgba(255,255,255,0.3);
-            border-color: rgba(255,255,255,0.5);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .setup-info h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
         }
 
-        .page {
-            display: none;
+        .setup-info ol {
+            color: #555;
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+
+        .setup-info li {
+            margin-bottom: 8px;
+        }
+
+        .setup-info code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        .form-container {
             background: rgba(255,255,255,0.95);
             border-radius: 20px;
             padding: 30px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             backdrop-filter: blur(10px);
-        }
-
-        .page.active {
-            display: block;
             animation: fadeIn 0.5s ease;
         }
 
@@ -88,7 +88,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .page h2 {
+        .form-container h2 {
             color: #333;
             margin-bottom: 25px;
             font-size: 1.8rem;
@@ -133,40 +133,6 @@
             color: #e74c3c;
         }
 
-        .search-section {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            border: 2px solid #e9ecef;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #dee2e6;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-        }
-
-        .search-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .search-btn:hover {
-            background: #218838;
-            transform: translateY(-2px);
-        }
-
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -189,6 +155,12 @@
 
         .btn:active {
             transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .message {
@@ -218,28 +190,6 @@
             border: 2px solid #bee5eb;
         }
 
-        .google-sheets-setup {
-            background: #fff3cd;
-            border: 2px solid #ffeaa7;
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 25px;
-        }
-
-        .google-sheets-setup h3 {
-            color: #856404;
-            margin-bottom: 15px;
-        }
-
-        .google-sheets-setup ol {
-            color: #856404;
-            padding-left: 20px;
-        }
-
-        .google-sheets-setup li {
-            margin-bottom: 8px;
-        }
-
         @media (max-width: 768px) {
             .container {
                 padding: 15px;
@@ -253,13 +203,8 @@
                 grid-template-columns: 1fr;
             }
 
-            .nav-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .nav-btn {
-                width: 200px;
+            .setup-info, .form-container {
+                padding: 20px;
             }
         }
 
@@ -276,24 +221,48 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .endpoint-input {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .endpoint-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>🏥 Student Health Tracker</h1>
-            <p>Comprehensive health data management system</p>
+            <p>Comprehensive health data management with Formspree</p>
         </div>
 
-        <div class="nav-buttons">
-            <button class="nav-btn active" onclick="showPage('add')">➕ Add New Student</button>
-            <button class="nav-btn" onclick="showPage('search')">🔍 Search & Update</button>
+        <!-- Setup Complete -->
+        <div class="setup-info">
+            <h3>✅ Ready to Use!</h3>
+            <p style="color: #28a745; font-weight: 600; font-size: 1.1rem;">
+                🎉 Your form is connected and ready to collect student health data!
+            </p>
+            <p style="margin-top: 10px; color: #666;">
+                All submissions will be sent to your Formspree account. You can view them at 
+                <strong>formspree.io</strong> and export to CSV anytime.
+            </p>
         </div>
 
-        <!-- Add New Student Page -->
-        <div id="addPage" class="page active">
-            <h2>Add New Student Data</h2>
-            <form id="studentForm">
+        <!-- Student Form -->
+        <div class="form-container">
+            <h2>Add Student Health Data</h2>
+            <form id="studentForm" action="https://formspree.io/f/mzzrljoj" method="POST">
                 <div class="form-grid">
                     <div class="form-group">
                         <label for="name">Name <span class="required">*</span></label>
@@ -319,11 +288,11 @@
                     </div>
                     <div class="form-group">
                         <label for="fbsGlucometer">FBS Level (Glucometer) mg/dL</label>
-                        <input type="number" id="fbsGlucometer" name="fbsGlucometer" step="0.1">
+                        <input type="number" id="fbsGlucometer" name="fbs_glucometer" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="fbsGlucoseOxidase">FBS Level (Glucose Oxidase) mg/dL</label>
-                        <input type="number" id="fbsGlucoseOxidase" name="fbsGlucoseOxidase" step="0.1">
+                        <input type="number" id="fbsGlucoseOxidase" name="fbs_glucose_oxidase" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="weight">Weight (kg)</label>
@@ -335,446 +304,109 @@
                     </div>
                     <div class="form-group">
                         <label for="waistCircumference">Waist Circumference (cm)</label>
-                        <input type="number" id="waistCircumference" name="waistCircumference" step="0.1">
+                        <input type="number" id="waistCircumference" name="waist_circumference" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="hipCircumference">Hip Circumference (cm)</label>
-                        <input type="number" id="hipCircumference" name="hipCircumference" step="0.1">
+                        <input type="number" id="hipCircumference" name="hip_circumference" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="midUpperArmCircumference">Mid Upper Arm Circumference (cm)</label>
-                        <input type="number" id="midUpperArmCircumference" name="midUpperArmCircumference" step="0.1">
+                        <input type="number" id="midUpperArmCircumference" name="mid_upper_arm_circumference" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="midUpperArmLength">Mid Upper Arm Length (cm)</label>
-                        <input type="number" id="midUpperArmLength" name="midUpperArmLength" step="0.1">
+                        <input type="number" id="midUpperArmLength" name="mid_upper_arm_length" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="midUpperArmSkinFold">Mid Upper Arm Skin Fold Thickness (mm)</label>
-                        <input type="number" id="midUpperArmSkinFold" name="midUpperArmSkinFold" step="0.1">
+                        <input type="number" id="midUpperArmSkinFold" name="mid_upper_arm_skin_fold" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="bodyFat">Body Fat (%)</label>
-                        <input type="number" id="bodyFat" name="bodyFat" step="0.1">
+                        <input type="number" id="bodyFat" name="body_fat" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="visceralFat">Visceral Fat</label>
-                        <input type="number" id="visceralFat" name="visceralFat" step="0.1">
+                        <input type="number" id="visceralFat" name="visceral_fat" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="restingMetabolism">Resting Metabolism (kcal)</label>
-                        <input type="number" id="restingMetabolism" name="restingMetabolism">
+                        <input type="number" id="restingMetabolism" name="resting_metabolism">
                     </div>
                     <div class="form-group">
-                        <label for="bmi">BMI</label>
-                        <input type="number" id="bmi" name="bmi" step="0.1">
+                        <label for="bmi">BMI (Auto-calculated)</label>
+                        <input type="number" id="bmi" name="bmi" step="0.1" readonly style="background-color: #f8f9fa;">
                     </div>
                     <div class="form-group">
                         <label for="bodyAge">Body Age</label>
-                        <input type="number" id="bodyAge" name="bodyAge">
+                        <input type="number" id="bodyAge" name="body_age">
                     </div>
                     <div class="form-group">
                         <label for="subcutaneousFatWholeBody">Subcutaneous Fat Whole Body (%)</label>
-                        <input type="number" id="subcutaneousFatWholeBody" name="subcutaneousFatWholeBody" step="0.1">
+                        <input type="number" id="subcutaneousFatWholeBody" name="subcutaneous_fat_whole_body" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="subcutaneousFatTrunk">Subcutaneous Fat Trunk (%)</label>
-                        <input type="number" id="subcutaneousFatTrunk" name="subcutaneousFatTrunk" step="0.1">
+                        <input type="number" id="subcutaneousFatTrunk" name="subcutaneous_fat_trunk" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="subcutaneousFatArm">Subcutaneous Fat Arm (%)</label>
-                        <input type="number" id="subcutaneousFatArm" name="subcutaneousFatArm" step="0.1">
+                        <input type="number" id="subcutaneousFatArm" name="subcutaneous_fat_arm" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="subcutaneousFatLeg">Subcutaneous Fat Leg (%)</label>
-                        <input type="number" id="subcutaneousFatLeg" name="subcutaneousFatLeg" step="0.1">
+                        <input type="number" id="subcutaneousFatLeg" name="subcutaneous_fat_leg" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="skeletalMuscleWholeBody">Skeletal Muscle Whole Body (%)</label>
-                        <input type="number" id="skeletalMuscleWholeBody" name="skeletalMuscleWholeBody" step="0.1">
+                        <input type="number" id="skeletalMuscleWholeBody" name="skeletal_muscle_whole_body" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="skeletalMuscleTrunk">Skeletal Muscle Trunk (%)</label>
-                        <input type="number" id="skeletalMuscleTrunk" name="skeletalMuscleTrunk" step="0.1">
+                        <input type="number" id="skeletalMuscleTrunk" name="skeletal_muscle_trunk" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="skeletalMuscleArm">Skeletal Muscle Arm (%)</label>
-                        <input type="number" id="skeletalMuscleArm" name="skeletalMuscleArm" step="0.1">
+                        <input type="number" id="skeletalMuscleArm" name="skeletal_muscle_arm" step="0.1">
                     </div>
                     <div class="form-group">
                         <label for="skeletalMuscleLeg">Skeletal Muscle Leg (%)</label>
-                        <input type="number" id="skeletalMuscleLeg" name="skeletalMuscleLeg" step="0.1">
+                        <input type="number" id="skeletalMuscleLeg" name="skeletal_muscle_leg" step="0.1">
                     </div>
                 </div>
-                <button type="submit" class="btn">💾 Save Student Data</button>
+
+                <!-- Hidden field for timestamp -->
+                <input type="hidden" name="submission_time" id="submissionTime">
+                
+                <button type="submit" class="btn" id="submitBtn">💾 Save Student Data</button>
             </form>
-            <div id="addMessage" class="message"></div>
-        </div>
-
-        <!-- Search & Update Page -->
-        <div id="searchPage" class="page">
-            <h2>Search & Update Student Data</h2>
-            
-            <div class="search-section">
-                <input type="text" id="searchName" class="search-input" placeholder="Enter student name to search...">
-                <button onclick="searchStudent()" class="search-btn">🔍 Search Student</button>
-            </div>
-
-            <div id="updateForm" style="display: none;">
-                <form id="updateStudentForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="updateName">Name <span class="required">*</span></label>
-                            <input type="text" id="updateName" name="name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="updateAge">Age</label>
-                            <input type="number" id="updateAge" name="age" min="0" max="150">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateBloodGroup">Blood Group</label>
-                            <select id="updateBloodGroup" name="bloodGroup">
-                                <option value="">Select Blood Group</option>
-                                <option value="A+">A+</option>
-                                <option value="A-">A-</option>
-                                <option value="B+">B+</option>
-                                <option value="B-">B-</option>
-                                <option value="AB+">AB+</option>
-                                <option value="AB-">AB-</option>
-                                <option value="O+">O+</option>
-                                <option value="O-">O-</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="updateFbsGlucometer">FBS Level (Glucometer) mg/dL</label>
-                            <input type="number" id="updateFbsGlucometer" name="fbsGlucometer" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateFbsGlucoseOxidase">FBS Level (Glucose Oxidase) mg/dL</label>
-                            <input type="number" id="updateFbsGlucoseOxidase" name="fbsGlucoseOxidase" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateWeight">Weight (kg)</label>
-                            <input type="number" id="updateWeight" name="weight" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateHeight">Height (cm)</label>
-                            <input type="number" id="updateHeight" name="height" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateWaistCircumference">Waist Circumference (cm)</label>
-                            <input type="number" id="updateWaistCircumference" name="waistCircumference" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateHipCircumference">Hip Circumference (cm)</label>
-                            <input type="number" id="updateHipCircumference" name="hipCircumference" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateMidUpperArmCircumference">Mid Upper Arm Circumference (cm)</label>
-                            <input type="number" id="updateMidUpperArmCircumference" name="midUpperArmCircumference" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateMidUpperArmLength">Mid Upper Arm Length (cm)</label>
-                            <input type="number" id="updateMidUpperArmLength" name="midUpperArmLength" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateMidUpperArmSkinFold">Mid Upper Arm Skin Fold Thickness (mm)</label>
-                            <input type="number" id="updateMidUpperArmSkinFold" name="midUpperArmSkinFold" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateBodyFat">Body Fat (%)</label>
-                            <input type="number" id="updateBodyFat" name="bodyFat" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateVisceralFat">Visceral Fat</label>
-                            <input type="number" id="updateVisceralFat" name="visceralFat" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateRestingMetabolism">Resting Metabolism (kcal)</label>
-                            <input type="number" id="updateRestingMetabolism" name="restingMetabolism">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateBmi">BMI</label>
-                            <input type="number" id="updateBmi" name="bmi" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateBodyAge">Body Age</label>
-                            <input type="number" id="updateBodyAge" name="bodyAge">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateSubcutaneousFatWholeBody">Subcutaneous Fat Whole Body (%)</label>
-                            <input type="number" id="updateSubcutaneousFatWholeBody" name="subcutaneousFatWholeBody" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateSubcutaneousFatTrunk">Subcutaneous Fat Trunk (%)</label>
-                            <input type="number" id="updateSubcutaneousFatTrunk" name="subcutaneousFatTrunk" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateSubcutaneousFatArm">Subcutaneous Fat Arm (%)</label>
-                            <input type="number" id="updateSubcutaneousFatArm" name="subcutaneousFatArm" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateSubcutaneousFatLeg">Subcutaneous Fat Leg (%)</label>
-                            <input type="number" id="updateSubcutaneousFatLeg" name="subcutaneousFatLeg" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateSkeletalMuscleWholeBody">Skeletal Muscle Whole Body (%)</label>
-                            <input type="number" id="updateSkeletalMuscleWholeBody" name="skeletalMuscleWholeBody" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateSkeletalMuscleTrunk">Skeletal Muscle Trunk (%)</label>
-                            <input type="number" id="updateSkeletalMuscleTrunk" name="skeletalMuscleTrunk" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateSkeletalMuscleArm">Skeletal Muscle Arm (%)</label>
-                            <input type="number" id="updateSkeletalMuscleArm" name="skeletalMuscleArm" step="0.1">
-                        </div>
-                        <div class="form-group">
-                            <label for="updateSkeletalMuscleLeg">Skeletal Muscle Leg (%)</label>
-                            <input type="number" id="updateSkeletalMuscleLeg" name="skeletalMuscleLeg" step="0.1">
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">🔄 Update Student Data</button>
-                </form>
-            </div>
-            
-            <div id="searchMessage" class="message"></div>
+            <div id="message" class="message"></div>
         </div>
     </div>
 
     <script>
-        // Replace this URL with your Google Apps Script deployment URL
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-w_IM-tXZ1RGuf0rFxX6susEWT2_R4LLTjM0ZAabCY2juuVOjGSkspzbQxOFxqUA8/exec';
-        
-        let currentStudentRow = null;
-
-        // Page navigation
-        function showPage(pageType) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            
-            if (pageType === 'add') {
-                document.getElementById('addPage').classList.add('active');
-                document.querySelector('.nav-btn').classList.add('active');
-            } else {
-                document.getElementById('searchPage').classList.add('active');
-                document.querySelectorAll('.nav-btn')[1].classList.add('active');
-            }
+        // Update Formspree endpoint - No longer needed since it's hardcoded
+        function updateEndpoint() {
+            showMessage('Endpoint is already configured and ready to use!', 'info');
         }
 
         // Show message
-        function showMessage(elementId, message, type) {
-            const messageEl = document.getElementById(elementId);
+        function showMessage(message, type) {
+            const messageEl = document.getElementById('message');
             messageEl.textContent = message;
             messageEl.className = `message ${type}`;
             messageEl.style.display = 'block';
-            setTimeout(() => {
-                messageEl.style.display = 'none';
-            }, 5000);
-        }
-
-        // Form data to object
-        function formDataToObject(formData) {
-            const obj = {};
-            for (let [key, value] of formData.entries()) {
-                obj[key] = value;
-            }
-            return obj;
-        }
-
-        // Add new student
-        document.getElementById('studentForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
             
-            const formData = new FormData(this);
-            const studentData = formDataToObject(formData);
-            
-            if (!studentData.name.trim()) {
-                showMessage('addMessage', 'Name is required!', 'error');
-                return;
-            }
-
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span class="loading"></span> Saving...';
-            submitBtn.disabled = true;
-
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'addStudent',
-                        data: studentData
-                    })
-                });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage('addMessage', '✅ Student data saved successfully!', 'success');
-                    this.reset();
-                } else {
-                    showMessage('addMessage', '❌ Error: ' + (result.message || 'Failed to save data'), 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage('addMessage', '❌ Network error. Please check your connection and try again.', 'error');
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }
-        });
-
-        // Search student
-        async function searchStudent() {
-            const searchName = document.getElementById('searchName').value.trim();
-            
-            if (!searchName) {
-                showMessage('searchMessage', 'Please enter a student name to search', 'error');
-                return;
-            }
-
-            const searchBtn = document.querySelector('.search-btn');
-            const originalText = searchBtn.innerHTML;
-            searchBtn.innerHTML = '<span class="loading"></span> Searching...';
-            searchBtn.disabled = true;
-
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'searchStudent',
-                        name: searchName
-                    })
-                });
-
-                const result = await response.json();
-                
-                if (result.success && result.data) {
-                    populateUpdateForm(result.data, result.row);
-                    document.getElementById('updateForm').style.display = 'block';
-                    showMessage('searchMessage', '✅ Student found! You can now update the data below.', 'success');
-                } else {
-                    document.getElementById('updateForm').style.display = 'none';
-                    showMessage('searchMessage', '📝 No student found with that name. You can add them using the "Add New Student" page.', 'info');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage('searchMessage', '❌ Network error. Please check your connection and try again.', 'error');
-            } finally {
-                searchBtn.innerHTML = originalText;
-                searchBtn.disabled = false;
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageEl.style.display = 'none';
+                }, 5000);
             }
         }
 
-        // Populate update form
-        function populateUpdateForm(data, row) {
-            currentStudentRow = row;
-            
-            // Map the data to update form fields
-            const fieldMapping = {
-                'updateName': 'name',
-                'updateAge': 'age',
-                'updateBloodGroup': 'bloodGroup',
-                'updateFbsGlucometer': 'fbsGlucometer',
-                'updateFbsGlucoseOxidase': 'fbsGlucoseOxidase',
-                'updateWeight': 'weight',
-                'updateHeight': 'height',
-                'updateWaistCircumference': 'waistCircumference',
-                'updateHipCircumference': 'hipCircumference',
-                'updateMidUpperArmCircumference': 'midUpperArmCircumference',
-                'updateMidUpperArmLength': 'midUpperArmLength',
-                'updateMidUpperArmSkinFold': 'midUpperArmSkinFold',
-                'updateBodyFat': 'bodyFat',
-                'updateVisceralFat': 'visceralFat',
-                'updateRestingMetabolism': 'restingMetabolism',
-                'updateBmi': 'bmi',
-                'updateBodyAge': 'bodyAge',
-                'updateSubcutaneousFatWholeBody': 'subcutaneousFatWholeBody',
-                'updateSubcutaneousFatTrunk': 'subcutaneousFatTrunk',
-                'updateSubcutaneousFatArm': 'subcutaneousFatArm',
-                'updateSubcutaneousFatLeg': 'subcutaneousFatLeg',
-                'updateSkeletalMuscleWholeBody': 'skeletalMuscleWholeBody',
-                'updateSkeletalMuscleTrunk': 'skeletalMuscleTrunk',
-                'updateSkeletalMuscleArm': 'skeletalMuscleArm',
-                'updateSkeletalMuscleLeg': 'skeletalMuscleLeg'
-            };
-
-            // Populate form fields
-            Object.keys(fieldMapping).forEach(fieldId => {
-                const element = document.getElementById(fieldId);
-                const dataKey = fieldMapping[fieldId];
-                if (element && data[dataKey] !== undefined) {
-                    element.value = data[dataKey] || '';
-                }
-            });
-        }
-
-        // Update student data
-        document.getElementById('updateStudentForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            const studentData = formDataToObject(formData);
-            
-            if (!studentData.name.trim()) {
-                showMessage('searchMessage', 'Name is required!', 'error');
-                return;
-            }
-
-            if (!currentStudentRow) {
-                showMessage('searchMessage', 'No student selected for update', 'error');
-                return;
-            }
-
-            const submitBtn = e.target.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span class="loading"></span> Updating...';
-            submitBtn.disabled = true;
-
-            try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        action: 'updateStudent',
-                        data: studentData,
-                        row: currentStudentRow
-                    })
-                });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    showMessage('searchMessage', '✅ Student data updated successfully!', 'success');
-                } else {
-                    showMessage('searchMessage', '❌ Error: ' + (result.message || 'Failed to update data'), 'error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                showMessage('searchMessage', '❌ Network error. Please check your connection and try again.', 'error');
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            }
-        });
-
-        // Allow search on Enter key
-        document.getElementById('searchName').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                searchStudent();
-            }
-        });
-
-        // Auto-calculate BMI when weight and height are entered
+        // Auto-calculate BMI
         function calculateBMI() {
             const weight = parseFloat(document.getElementById('weight').value);
             const height = parseFloat(document.getElementById('height').value);
@@ -783,33 +415,96 @@
                 const heightInMeters = height / 100;
                 const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
                 document.getElementById('bmi').value = bmi;
-            }
-        }
-
-        function calculateBMIUpdate() {
-            const weight = parseFloat(document.getElementById('updateWeight').value);
-            const height = parseFloat(document.getElementById('updateHeight').value);
-            
-            if (weight && height) {
-                const heightInMeters = height / 100;
-                const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
-                document.getElementById('updateBmi').value = bmi;
+            } else {
+                document.getElementById('bmi').value = '';
             }
         }
 
         // Add BMI calculation listeners
         document.getElementById('weight').addEventListener('input', calculateBMI);
         document.getElementById('height').addEventListener('input', calculateBMI);
-        document.getElementById('updateWeight').addEventListener('input', calculateBMIUpdate);
-        document.getElementById('updateHeight').addEventListener('input', calculateBMIUpdate);
 
-        // Clear update form when switching to add page
-        document.querySelector('.nav-btn').addEventListener('click', function() {
-            document.getElementById('updateForm').style.display = 'none';
-            document.getElementById('searchName').value = '';
-            currentStudentRow = null;
+        // Handle form submission
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            // Add timestamp
+            document.getElementById('submissionTime').value = new Date().toISOString();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading state
+            submitBtn.innerHTML = '<span class="loading"></span> Saving...';
+            submitBtn.disabled = true;
+            
+            // Form is ready to submit with hardcoded endpoint
+            // The form will submit naturally to Formspree
+        });
+
+        // Handle successful form submission (Formspree redirects back or shows success)
+        window.addEventListener('load', function() {
+            // Check if we're returning from a successful Formspree submission
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('success') === 'true') {
+                showMessage('✅ Student data saved successfully!', 'success');
+                document.getElementById('studentForm').reset();
+                
+                // Clean up URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+
+        // Enhanced form validation
+        document.getElementById('name').addEventListener('blur', function() {
+            if (!this.value.trim()) {
+                this.style.borderColor = '#e74c3c';
+            } else {
+                this.style.borderColor = '#e1e5e9';
+            }
+        });
+
+        // Auto-focus on name field
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('name').focus();
+        });
+
+        // Preserve form data in case of navigation
+        function saveFormData() {
+            const formData = new FormData(document.getElementById('studentForm'));
+            const data = {};
+            for (let [key, value] of formData.entries()) {
+                if (value.trim()) {
+                    data[key] = value;
+                }
+            }
+            sessionStorage.setItem('studentFormData', JSON.stringify(data));
+        }
+
+        function loadFormData() {
+            const saved = sessionStorage.getItem('studentFormData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                Object.keys(data).forEach(key => {
+                    const field = document.getElementById(key) || document.getElementsByName(key)[0];
+                    if (field) {
+                        field.value = data[key];
+                    }
+                });
+                calculateBMI(); // Recalculate BMI if weight/height were loaded
+            }
+        }
+
+        // Save form data periodically
+        setInterval(saveFormData, 5000);
+
+        // Load saved data on page load
+        document.addEventListener('DOMContentLoaded', loadFormData);
+
+        // Clear saved data on successful submission
+        document.getElementById('studentForm').addEventListener('submit', function() {
+            setTimeout(() => {
+                sessionStorage.removeItem('studentFormData');
+            }, 1000);
         });
     </script>
 </body>
 </html>
-            
