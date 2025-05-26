@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Health Data Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-btn:hover, .nav-btn.active {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .page {
+            display: none;
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #555;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .search-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .search-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 0 auto;
+            min-width: 150px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+
+        .message.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+
+        .google-sheets-setup {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .google-sheets-setup h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .google-sheets-setup ol {
+            color: #856404;
+            padding-left: 20px;
+        }
+
+        .google-sheets-setup li {
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-btn {
+                width: 200px;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Student Health Tracker</h1>
+            <p>Comprehensive health data management system</p>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn active" onclick="showPage('add')">➕ Add New Student</button>
+            <button class="nav-btn" onclick="showPage('search')">🔍 Search & Update</button>
+        </div>
+
+        <!-- Google Sheets Setup Instructions -->
+        <div class="google-sheets-setup">
+            <h3>📋 Google Sheets Setup Instructions</h3>
+            <ol>
+                <li>Create a new Google Sheet with the name "Student Health Data"</li>
+                <li>Add column headers in row 1: Name, Age, Blood Group, FBS Level (Glucometer), FBS Level (Glucose Oxidase), Weight, Height, Waist Circumference, Hip Circumference, Mid Upper Arm Circumference, Mid Upper Arm Length, Mid Upper Arm Skin Fold Thickness, Body Fat, Visceral Fat, Resting Metabolism, BMI, Body Age, Subcutaneous Fat Whole Body, Subcutaneous Fat Trunk, Subcutaneous Fat Arm, Subcutaneous Fat Leg, Skeletal Muscle Whole Body, Skeletal Muscle Trunk, Skeletal Muscle Arm, Skeletal Muscle Leg</li>
+                <li>Go to Extensions → Apps Script</li>
+                <li>Replace the default code with the provided Google Apps Script code</li>
+                <li>Deploy as web app and copy the URL to replace in the JavaScript section below</li>
+            </ol>
+        </div>
+
+        <!-- Add New Student Page -->
+        <div id="addPage" class="page active">
+            <h2>Add New Student Data</h2>
+            <form id="studentForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="name">Name <span class="required">*</span></label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" min="0" max="150">
+                    </div>
+                    <div class="form-group">
+                        <label for="bloodGroup">Blood Group</label>
+                        <select id="bloodGroup" name="bloodGroup">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="fbsGlucometer">FBS Level (Glucometer) mg/dL</label>
+                        <input type="number" id="fbsGlucometer" name="fbsGlucometer" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="fbsGlucoseOxidase">FBS Level (Glucose Oxidase) mg/dL</label>
+                        <input type="number" id="fbsGlucoseOxidase" name="fbsGlucoseOxidase" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" name="height" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="waistCircumference">Waist Circumference (cm)</label>
+                        <input type="number" id="waistCircumference" name="waistCircumference" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="hipCircumference">Hip Circumference (cm)</label>
+                        <input type="number" id="hipCircumference" name="hipCircumference" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="midUpperArmCircumference">Mid Upper Arm Circumference (cm)</label>
+                        <input type="number" id="midUpperArmCircumference" name="midUpperArmCircumference" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="midUpperArmLength">Mid Upper Arm Length (cm)</label>
+                        <input type="number" id="midUpperArmLength" name="midUpperArmLength" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="midUpperArmSkinFold">Mid Upper Arm Skin Fold Thickness (mm)</label>
+                        <input type="number" id="midUpperArmSkinFold" name="midUpperArmSkinFold" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="bodyFat">Body Fat (%)</label>
+                        <input type="number" id="bodyFat" name="bodyFat" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="visceralFat">Visceral Fat</label>
+                        <input type="number" id="visceralFat" name="visceralFat" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="restingMetabolism">Resting Metabolism (kcal)</label>
+                        <input type="number" id="restingMetabolism" name="restingMetabolism">
+                    </div>
+                    <div class="form-group">
+                        <label for="bmi">BMI</label>
+                        <input type="number" id="bmi" name="bmi" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="bodyAge">Body Age</label>
+                        <input type="number" id="bodyAge" name="bodyAge">
+                    </div>
+                    <div class="form-group">
+                        <label for="subcutaneousFatWholeBody">Subcutaneous Fat Whole Body (%)</label>
+                        <input type="number" id="subcutaneousFatWholeBody" name="subcutaneousFatWholeBody" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="subcutaneousFatTrunk">Subcutaneous Fat Trunk (%)</label>
+                        <input type="number" id="subcutaneousFatTrunk" name="subcutaneousFatTrunk" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="subcutaneousFatArm">Subcutaneous Fat Arm (%)</label>
+                        <input type="number" id="subcutaneousFatArm" name="subcutaneousFatArm" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="subcutaneousFatLeg">Subcutaneous Fat Leg (%)</label>
+                        <input type="number" id="subcutaneousFatLeg" name="subcutaneousFatLeg" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="skeletalMuscleWholeBody">Skeletal Muscle Whole Body (%)</label>
+                        <input type="number" id="skeletalMuscleWholeBody" name="skeletalMuscleWholeBody" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="skeletalMuscleTrunk">Skeletal Muscle Trunk (%)</label>
+                        <input type="number" id="skeletalMuscleTrunk" name="skeletalMuscleTrunk" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="skeletalMuscleArm">Skeletal Muscle Arm (%)</label>
+                        <input type="number" id="skeletalMuscleArm" name="skeletalMuscleArm" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="skeletalMuscleLeg">Skeletal Muscle Leg (%)</label>
+                        <input type="number" id="skeletalMuscleLeg" name="skeletalMuscleLeg" step="0.1">
+                    </div>
+                </div>
+                <button type="submit" class="btn">💾 Save Student Data</button>
+            </form>
+            <div id="addMessage" class="message"></div>
+        </div>
+
+        <!-- Search & Update Page -->
+        <div id="searchPage" class="page">
+            <h2>Search & Update Student Data</h2>
+            
+            <div class="search-section">
+                <input type="text" id="searchName" class="search-input" placeholder="Enter student name to search...">
+                <button onclick="searchStudent()" class="search-btn">🔍 Search Student</button>
+            </div>
+
+            <div id="updateForm" style="display: none;">
+                <form id="updateStudentForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="updateName">Name <span class="required">*</span></label>
+                            <input type="text" id="updateName" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateAge">Age</label>
+                            <input type="number" id="updateAge" name="age" min="0" max="150">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateBloodGroup">Blood Group</label>
+                            <select id="updateBloodGroup" name="bloodGroup">
+                                <option value="">Select Blood Group</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="updateFbsGlucometer">FBS Level (Glucometer) mg/dL</label>
+                            <input type="number" id="updateFbsGlucometer" name="fbsGlucometer" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateFbsGlucoseOxidase">FBS Level (Glucose Oxidase) mg/dL</label>
+                            <input type="number" id="updateFbsGlucoseOxidase" name="fbsGlucoseOxidase" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateWeight">Weight (kg)</label>
+                            <input type="number" id="updateWeight" name="weight" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateHeight">Height (cm)</label>
+                            <input type="number" id="updateHeight" name="height" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateWaistCircumference">Waist Circumference (cm)</label>
+                            <input type="number" id="updateWaistCircumference" name="waistCircumference" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateHipCircumference">Hip Circumference (cm)</label>
+                            <input type="number" id="updateHipCircumference" name="hipCircumference" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateMidUpperArmCircumference">Mid Upper Arm Circumference (cm)</label>
+                            <input type="number" id="updateMidUpperArmCircumference" name="midUpperArmCircumference" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateMidUpperArmLength">Mid Upper Arm Length (cm)</label>
+                            <input type="number" id="updateMidUpperArmLength" name="midUpperArmLength" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateMidUpperArmSkinFold">Mid Upper Arm Skin Fold Thickness (mm)</label>
+                            <input type="number" id="updateMidUpperArmSkinFold" name="midUpperArmSkinFold" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateBodyFat">Body Fat (%)</label>
+                            <input type="number" id="updateBodyFat" name="bodyFat" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateVisceralFat">Visceral Fat</label>
+                            <input type="number" id="updateVisceralFat" name="visceralFat" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateRestingMetabolism">Resting Metabolism (kcal)</label>
+                            <input type="number" id="updateRestingMetabolism" name="restingMetabolism">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateBmi">BMI</label>
+                            <input type="number" id="updateBmi" name="bmi" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateBodyAge">Body Age</label>
+                            <input type="number" id="updateBodyAge" name="bodyAge">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateSubcutaneousFatWholeBody">Subcutaneous Fat Whole Body (%)</label>
+                            <input type="number" id="updateSubcutaneousFatWholeBody" name="subcutaneousFatWholeBody" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateSubcutaneousFatTrunk">Subcutaneous Fat Trunk (%)</label>
+                            <input type="number" id="updateSubcutaneousFatTrunk" name="subcutaneousFatTrunk" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateSubcutaneousFatArm">Subcutaneous Fat Arm (%)</label>
+                            <input type="number" id="updateSubcutaneousFatArm" name="subcutaneousFatArm" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateSubcutaneousFatLeg">Subcutaneous Fat Leg (%)</label>
+                            <input type="number" id="updateSubcutaneousFatLeg" name="subcutaneousFatLeg" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateSkeletalMuscleWholeBody">Skeletal Muscle Whole Body (%)</label>
+                            <input type="number" id="updateSkeletalMuscleWholeBody" name="skeletalMuscleWholeBody" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateSkeletalMuscleTrunk">Skeletal Muscle Trunk (%)</label>
+                            <input type="number" id="updateSkeletalMuscleTrunk" name="skeletalMuscleTrunk" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateSkeletalMuscleArm">Skeletal Muscle Arm (%)</label>
+                            <input type="number" id="updateSkeletalMuscleArm" name="skeletalMuscleArm" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="updateSkeletalMuscleLeg">Skeletal Muscle Leg (%)</label>
+                            <input type="number" id="updateSkeletalMuscleLeg" name="skeletalMuscleLeg" step="0.1">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn">🔄 Update Student Data</button>
+                </form>
+            </div>
+            
+            <div id="searchMessage" class="message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Replace this URL with your Google Apps Script deployment URL
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxqOeZZlQyBY6nJAPU2ncRvlhaVC3a01pvbC6Qzwvnz-clLSbOPGUO0ahrgCemYT0fi/exec';
+        
+        let currentStudentRow = null;
+
+        // Page navigation
+        function showPage(pageType) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            if (pageType === 'add') {
+                document.getElementById('addPage').classList.add('active');
+                document.querySelector('.nav-btn').classList.add('active');
+            } else {
+                document.getElementById('searchPage').classList.add('active');
+                document.querySelectorAll('.nav-btn')[1].classList.add('active');
+            }
+        }
+
+        // Show message
+        function showMessage(elementId, message, type) {
+            const messageEl = document.getElementById(elementId);
+            messageEl.textContent = message;
+            messageEl.className = `message ${type}`;
+            messageEl.style.display = 'block';
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
+        // Form data to object
+        function formDataToObject(formData) {
+            const obj = {};
+            for (let [key, value] of formData.entries()) {
+                obj[key] = value;
+            }
+            return obj;
+        }
+
+        // Add new student
+        document.getElementById('studentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const studentData = formDataToObject(formData);
+            
+            if (!studentData.name.trim()) {
+                showMessage('addMessage', 'Name is required!', 'error');
+                return;
+            }
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading"></span> Saving...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'addStudent',
+                        data: studentData
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('addMessage', '✅ Student data saved successfully!', 'success');
+                    this.reset();
+                } else {
+                    showMessage('addMessage', '❌ Error: ' + (result.message || 'Failed to save data'), 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('addMessage', '❌ Network error. Please check your connection and try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Search student
+        async function searchStudent() {
+            const searchName = document.getElementById('searchName').value.trim();
+            
+            if (!searchName) {
+                showMessage('searchMessage', 'Please enter a student name to search', 'error');
+                return;
+            }
+
+            const searchBtn = document.querySelector('.search-btn');
+            const originalText = searchBtn.innerHTML;
+            searchBtn.innerHTML = '<span class="loading"></span> Searching...';
+            searchBtn.disabled = true;
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'searchStudent',
+                        name: searchName
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    populateUpdateForm(result.data, result.row);
+                    document.getElementById('updateForm').style.display = 'block';
+                    showMessage('searchMessage', '✅ Student found! You can now update the data below.', 'success');
+                } else {
+                    document.getElementById('updateForm').style.display = 'none';
+                    showMessage('searchMessage', '📝 No student found with that name. You can add them using the "Add New Student" page.', 'info');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('searchMessage', '❌ Network error. Please check your connection and try again.', 'error');
+            } finally {
+                searchBtn.innerHTML = originalText;
+                searchBtn.disabled = false;
+            }
+        }
+
+        // Populate update form
+        function populateUpdateForm(data, row) {
+            currentStudentRow = row;
+            
+            // Map the data to update form fields
+            const fieldMapping = {
+                'updateName': 'name',
+                'updateAge': 'age',
+                'updateBloodGroup': 'bloodGroup',
+                'updateFbsGlucometer': 'fbsGlucometer',
+                'updateFbsGlucoseOxidase': 'fbsGlucoseOxidase',
+                'updateWeight': 'weight',
+                'updateHeight': 'height',
+                'updateWaistCircumference': 'waistCircumference',
+                'updateHipCircumference': 'hipCircumference',
+                'updateMidUpperArmCircumference': 'midUpperArmCircumference',
+                'updateMidUpperArmLength': 'midUpperArmLength',
+                'updateMidUpperArmSkinFold': 'midUpperArmSkinFold',
+                'updateBodyFat': 'bodyFat',
+                'updateVisceralFat': 'visceralFat',
+                'updateRestingMetabolism': 'restingMetabolism',
+                'updateBmi': 'bmi',
+                'updateBodyAge': 'bodyAge',
+                'updateSubcutaneousFatWholeBody': 'subcutaneousFatWholeBody',
+                'updateSubcutaneousFatTrunk': 'subcutaneousFatTrunk',
+                'updateSubcutaneousFatArm': 'subcutaneousFatArm',
+                'updateSubcutaneousFatLeg': 'subcutaneousFatLeg',
+                'updateSkeletalMuscleWholeBody': 'skeletalMuscleWholeBody',
+                'updateSkeletalMuscleTrunk': 'skeletalMuscleTrunk',
+                'updateSkeletalMuscleArm': 'skeletalMuscleArm',
+                'updateSkeletalMuscleLeg': 'skeletalMuscleLeg'
+            };
+
+            // Populate form fields
+            Object.keys(fieldMapping).forEach(fieldId => {
+                const element = document.getElementById(fieldId);
+                const dataKey = fieldMapping[fieldId];
+                if (element && data[dataKey] !== undefined) {
+                    element.value = data[dataKey] || '';
+                }
+            });
+        }
+
+        // Update student data
+        document.getElementById('updateStudentForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const studentData = formDataToObject(formData);
+            
+            if (!studentData.name.trim()) {
+                showMessage('searchMessage', 'Name is required!', 'error');
+                return;
+            }
+
+            if (!currentStudentRow) {
+                showMessage('searchMessage', 'No student selected for update', 'error');
+                return;
+            }
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading"></span> Updating...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'updateStudent',
+                        data: studentData,
+                        row: currentStudentRow
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    showMessage('searchMessage', '✅ Student data updated successfully!', 'success');
+                } else {
+                    showMessage('searchMessage', '❌ Error: ' + (result.message || 'Failed to update data'), 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('searchMessage', '❌ Network error. Please check your connection and try again.', 'error');
+            } finally {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Allow search on Enter key
+        document.getElementById('searchName').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchStudent();
+            }
+        });
+
+        // Auto-calculate BMI when weight and height are entered
+        function calculateBMI() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            
+            if (weight && height) {
+                const heightInMeters = height / 100;
+                const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+                document.getElementById('bmi').value = bmi;
+            }
+        }
+
+        function calculateBMIUpdate() {
+            const weight = parseFloat(document.getElementById('updateWeight').value);
+            const height = parseFloat(document.getElementById('updateHeight').value);
+            
+            if (weight && height) {
+                const heightInMeters = height / 100;
+                const bmi = (weight / (heightInMeters * heightInMeters)).toFixed(1);
+                document.getElementById('updateBmi').value = bmi;
+            }
+        }
+
+        // Add BMI calculation listeners
+        document.getElementById('weight').addEventListener('input', calculateBMI);
+        document.getElementById('height').addEventListener('input', calculateBMI);
+        document.getElementById('updateWeight').addEventListener('input', calculateBMIUpdate);
+        document.getElementById('updateHeight').addEventListener('input', calculateBMIUpdate);
+
+        // Clear update form when switching to add page
+        document.querySelector('.nav-btn').addEventListener('click', function() {
+            document.getElementById('updateForm').style.display = 'none';
+            document.getElementById('searchName').value = '';
+            currentStudentRow = null;
+        });
+    </script>
+</body>
+</html>
+            
